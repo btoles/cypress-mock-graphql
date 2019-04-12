@@ -9,17 +9,22 @@ Cypress.Commands.add('mockGraphQL', { prevSubject: false }, (...mocks) => {
             win.fetch.restore();
         }
         cy.stub(win, 'fetch', async (...args) => {
-            // const [requestUri] = args;
-            // if (requestUri.some(uri => uri.contains('/graphql'))) {
+            const [requestUri] = args;
+            if (requestUri.includes('/graphql')) {
                 /** Alert the user that there are more GraphQL calls than there are mocks. */
                 if (requestsMocked >= mocks.length) {
                     Cypress.log({
                         message: 'WARNING: The number of GraphQL requests exceeded the number of mocks provided.'
                     });
                 }
-                return Promise.resolve(new Response(JSON.stringify(mocks[requestsMocked++])))
-            // }
-        });
+                const body = new Blob([JSON.stringify(mocks[requestsMocked++], null, 2)], {type : 'application/json'})
+                return new Response(body)
+            }
+            else if (win.fetch) {
+                // Call fetch normally if the request is not to a GraphQL endpoint
+                win.fetch.callThrough();
+            }
+        })
         Cypress.on('command:end', command => console.log(command.toJSON().name));
     });
 });
