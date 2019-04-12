@@ -1,0 +1,46 @@
+stages:
+  # - test
+  - latest
+  - next
+  - name: release
+    if: branch = master
+  - name: publish
+    if: branch = master
+
+language: node_js
+
+node_js:
+  - "10"
+
+jobs:
+  include:
+    # - stage: test
+    #   on:
+    #     tags: false
+    #   cache: npm
+    #   script: npm run test
+    - stage: latest
+      on:
+        tags: false
+      cache: npm
+      script: npm run current
+    - stage: next
+      on:
+        tags: false
+      cache: npm
+      script: npm run next
+    - stage: release
+      on:
+        tags: false
+      cache: npm
+      script: npm run release
+    - stage: publish
+      on:
+        tags: false
+      cache: npm
+      script: npm run update
+      deploy:
+        skip_cleanup: true
+        provider: npm
+        email: $NPM_EMAIL
+        api_key: $NPM_TOKEN
