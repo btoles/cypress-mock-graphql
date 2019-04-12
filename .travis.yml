@@ -23,7 +23,7 @@ jobs:
       on:
         tags: false
       cache: npm
-      script: npm run current
+      script: npm run latest
     - stage: next
       on:
         tags: false
