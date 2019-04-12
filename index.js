@@ -20,11 +20,6 @@ Cypress.Commands.add('mockGraphQL', { prevSubject: false }, (...mocks) => {
                 const body = new Blob([JSON.stringify(mocks[requestsMocked++], null, 2)], {type : 'application/json'})
                 return new Response(body)
             }
-            else if (win.fetch) {
-                // Call fetch normally if the request is not to a GraphQL endpoint
-                win.fetch.callThrough();
-            }
         })
-        Cypress.on('command:end', command => console.log(command.toJSON().name));
     });
 });
