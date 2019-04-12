@@ -1,0 +1,12 @@
+branch: master
+release:
+  breaking: major
+  feat: minor
+  perf: minor
+  refactor: minor
+  ci: patch
+  init: patch
+  chore: patch
+  fix: patch
+  test: patch
+  docs: patch
